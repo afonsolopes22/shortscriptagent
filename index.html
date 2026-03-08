@@ -244,17 +244,69 @@
       <div class="hook-text" id="hookText"></div>
     </div>
 
-    <div class="section-label">FULL SCRIPT <span class="duration-badge">~60 sec</span></div>
+    <div class="section-label">FULL SCRIPT <span class="duration-badge">~60 sec · max 120 words</span></div>
     <div class="output-card">
       <button class="copy-btn" onclick="copySection('scriptText', this)">Copy</button>
       <div class="script-content" id="scriptText"></div>
+    </div>
+
+    <div class="section-label">ALTERNATIVE HOOKS</div>
+    <div class="output-card">
+      <button class="copy-btn" onclick="copySection('hooksAlt', this)">Copy</button>
+      <div id="hooksAlt">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Hook 1</div>
+          <div class="script-content" id="hookAlt1"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Hook 2</div>
+          <div class="script-content" id="hookAlt2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">TITLE SUGGESTIONS</div>
+    <div class="output-card">
+      <button class="copy-btn" onclick="copySection('titlesDiv', this)">Copy</button>
+      <div id="titlesDiv">
+        <div style="margin-bottom:12px;">
+          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Title 1</div>
+          <div style="font-size:16px;font-weight:600;color:var(--text);" id="title1"></div>
+        </div>
+        <div>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Title 2</div>
+          <div style="font-size:16px;font-weight:600;color:var(--text);" id="title2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">VISUAL SUGGESTIONS</div>
+    <div class="output-card">
+      <button class="copy-btn" onclick="copySection('visualsDiv', this)">Copy</button>
+      <div id="visualsDiv" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--bg);padding:14px;border:1px solid var(--border);">
+          <div style="font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;font-weight:700;">Scene 1 · Hook</div>
+          <div style="font-size:13px;color:#ccc;" id="visual1"></div>
+        </div>
+        <div style="background:var(--bg);padding:14px;border:1px solid var(--border);">
+          <div style="font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;font-weight:700;">Scene 2 · Problem</div>
+          <div style="font-size:13px;color:#ccc;" id="visual2"></div>
+        </div>
+        <div style="background:var(--bg);padding:14px;border:1px solid var(--border);">
+          <div style="font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;font-weight:700;">Scene 3 · Value</div>
+          <div style="font-size:13px;color:#ccc;" id="visual3"></div>
+        </div>
+        <div style="background:var(--bg);padding:14px;border:1px solid var(--border);">
+          <div style="font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;font-weight:700;">Scene 4 · CTA</div>
+          <div style="font-size:13px;color:#ccc;" id="visual4"></div>
+        </div>
+      </div>
     </div>
 
     <div class="section-label">YOUTUBE METADATA</div>
     <div class="output-card">
       <button class="copy-btn" onclick="copySection('metaAll', this)">Copy All</button>
       <div class="meta-grid">
-        <div class="meta-item"><h4>Title</h4><p id="metaTitle"></p></div>
         <div class="meta-item"><h4>Description</h4><p id="metaDesc"></p></div>
         <div class="meta-item" style="grid-column:1/-1;"><h4>Hashtags</h4><div class="hashtags" id="metaTags"></div></div>
       </div>
@@ -483,24 +535,35 @@
     const niche = selectedNiche;
     const suggestedTags = (nicheData[niche]?.hashtags || ["shorts"]).join('","');
 
-    const prompt = `You are an expert YouTube Shorts scriptwriter specializing in the "${niche}" niche.
+    const prompt = `You are a specialist in writing short scripts for social media videos (TikTok, Instagram Reels, YouTube Shorts) in the "${niche}" niche.
 
-Create a complete, viral YouTube Short for this topic: "${topic}"
+Transform this idea into a short, clear, engaging script with viral potential: "${topic}"
 
-Respond ONLY with a valid JSON object. No markdown, no explanation, no backticks. Use this exact structure:
+CONTENT RULES:
+- Hook the viewer in the first 3 seconds
+- Use short sentences and natural language
+- Max 120 words total
+- Easy to read aloud
+- Simple, dynamic language
+- No repetitions or generic phrases
+- Be specific with numbers/stats when possible
+- Tailored to the ${niche} audience
+
+Respond ONLY with a valid JSON object. No markdown, no explanation, no backticks:
 {
-  "hook": "Opening 1-2 sentences (max 20 words). Must be shocking, provocative or curiosity-triggering.",
-  "script": "Full 60-second script. Conversational, punchy, direct. Use [PAUSE] for dramatic pauses. Line breaks between sections. Structure: Hook (5s) then Problem/Intrigue (15s) then Insight/Value (25s) then CTA (15s). Speak like a smart friend.",
-  "title": "YouTube title under 60 chars with a strong hook.",
-  "description": "2-3 sentences. Expand on the value plus soft CTA to follow for more.",
+  "hook": "Opening sentence (max 15 words). Shocking, provocative or curiosity-triggering. Grabs attention in 3 seconds.",
+  "script": "Full script max 120 words. 4 parts separated by blank lines:\n\n[HOOK - 3 sec]\nThe hook sentence.\n\n[PROBLEM/CURIOSITY - 15 sec]\nThe problem or intriguing question.\n\n[VALUE/INSIGHT - 30 sec]\nThe main information or solution. Use [PAUSE] for dramatic effect.\n\n[CALL TO ACTION - 10 sec]\nClear action for the audience.",
+  "hook_alt_1": "Alternative hook option 1 (max 15 words, different angle)",
+  "hook_alt_2": "Alternative hook option 2 (max 15 words, different angle)",
+  "title_1": "Video title option 1 (under 60 chars, strong hook)",
+  "title_2": "Video title option 2 (under 60 chars, different angle)",
+  "visual_1": "Simple visual suggestion for the Hook scene",
+  "visual_2": "Simple visual suggestion for the Problem/Curiosity scene",
+  "visual_3": "Simple visual suggestion for the Value/Insight scene",
+  "visual_4": "Simple visual suggestion for the Call to Action scene",
+  "description": "2-3 sentence YouTube description with soft CTA to follow",
   "hashtags": ["${suggestedTags}"]
-}
-
-Rules:
-- English only, casual and direct tone
-- Be specific with numbers and stats where possible
-- End the script with a CTA to like and follow
-- Tailor everything tightly to the ${niche} audience`;
+}`;
 
     try {
       const response = await fetch("/.netlify/functions/claude-proxy", {
@@ -527,7 +590,14 @@ Rules:
 
       document.getElementById('hookText').textContent = parsed.hook;
       document.getElementById('scriptText').textContent = parsed.script;
-      document.getElementById('metaTitle').textContent = parsed.title;
+      document.getElementById('hookAlt1').textContent = parsed.hook_alt_1 || '';
+      document.getElementById('hookAlt2').textContent = parsed.hook_alt_2 || '';
+      document.getElementById('title1').textContent = parsed.title_1 || parsed.title || '';
+      document.getElementById('title2').textContent = parsed.title_2 || '';
+      document.getElementById('visual1').textContent = parsed.visual_1 || '';
+      document.getElementById('visual2').textContent = parsed.visual_2 || '';
+      document.getElementById('visual3').textContent = parsed.visual_3 || '';
+      document.getElementById('visual4').textContent = parsed.visual_4 || '';
       document.getElementById('metaDesc').textContent = parsed.description || '';
 
       const tagsEl = document.getElementById('metaTags');
@@ -540,7 +610,7 @@ Rules:
       });
 
       document.getElementById('metaAll').textContent =
-        `TITLE:\n${parsed.title}\n\nDESCRIPTION:\n${parsed.description}\n\nHASHTAGS:\n${(parsed.hashtags||[]).map(t=>'#'+t).join(' ')}`;
+        `TITLES:\n1. ${parsed.title_1}\n2. ${parsed.title_2}\n\nDESCRIPTION:\n${parsed.description}\n\nHASHTAGS:\n${(parsed.hashtags||[]).map(t=>'#'+t).join(' ')}`;
 
       output.style.display = 'block';
       output.scrollIntoView({ behavior: 'smooth', block: 'start' });
