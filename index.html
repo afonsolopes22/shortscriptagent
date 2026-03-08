@@ -571,7 +571,7 @@ Respond ONLY with a valid JSON object. No markdown, no explanation, no backticks
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "claude-sonnet-4-5",
-          max_tokens: 1024,
+          max_tokens: 2048,
           messages: [{ role: "user", content: prompt }]
         })
       });
@@ -586,7 +586,7 @@ Respond ONLY with a valid JSON object. No markdown, no explanation, no backticks
       if (!jsonMatch) throw new Error('No JSON found in response: ' + raw.substring(0, 100));
       const parsed = JSON.parse(jsonMatch[0]);
 
-      if (!parsed.hook || !parsed.script || !parsed.title) throw new Error('Missing required fields in response');
+      if (!parsed.hook || !parsed.script) throw new Error('Missing required fields in response');
 
       document.getElementById('hookText').textContent = parsed.hook;
       document.getElementById('scriptText').textContent = parsed.script;
